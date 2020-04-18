@@ -3,6 +3,7 @@
 #include "unit/impl/dimension.hpp"
 #include "unit/impl/type_traits.hpp"
 
+#include <iostream>
 #include <type_traits>
 
 namespace Unit
@@ -92,6 +93,9 @@ public:
     DECLARE_BINARY_BOOL_OPERATOR(<=)
     DECLARE_BINARY_BOOL_OPERATOR(>)
     DECLARE_BINARY_BOOL_OPERATOR(>=)
+
+    // Stream Operators
+    //friend std::ostream& operator<<(std::ostream& os, const this_type& right);
 };
 
 }  // namespace Unit
