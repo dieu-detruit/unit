@@ -55,15 +55,25 @@ public:
         return *this;
     }
 
+    // Unary Arithmetic Operators
+    constexpr this_type operator+()
+    {
+        return *this;
+    }
+    constexpr this_type operator-()
+    {
+        return this_type{-value};
+    }
+
     // Binary Arithmetic Operators
     template <typename T, ONLY_IF(std::is_arithmetic_v<T>)>
-    constexpr this_type& operator*(T scalar) const
+    constexpr this_type operator*(T scalar) const
     {
         static_assert(is_multiplicable_v<value_type, T>, "You can only multiply floating point value.");
         return this_type{value * scalar};
     }
     template <typename T, ONLY_IF(std::is_arithmetic_v<T>)>
-    constexpr this_type& operator/(T scalar) const
+    constexpr this_type operator/(T scalar) const
     {
         static_assert(is_multiplicable_v<value_type, T>, "You can only devide with floating point value.");
         return this_type{value / scalar};
