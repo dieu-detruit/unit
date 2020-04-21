@@ -102,6 +102,15 @@ public:
         return DimensionType<decltype(dim{} / dim_{}), value_type>{this->value / right.value};
     }
 
+    constexpr this_type operator+(this_type right) const
+    {
+        return this_type{this->value + right.value};
+    }
+    constexpr this_type operator-(this_type right) const
+    {
+        return this_type{this->value - right.value};
+    }
+
     // Binary Bool Operators
 
 #define DECLARE_BINARY_BOOL_OPERATOR(op)     \
@@ -117,5 +126,29 @@ public:
     DECLARE_BINARY_BOOL_OPERATOR(>)
     DECLARE_BINARY_BOOL_OPERATOR(>=)
 };
+
+namespace Impl
+{
+
+template <typename T>
+struct get_elements {
+    using dim = std::nullptr_t;
+    using value_type = T;
+};
+
+template <class _dim, typename T>
+struct get_elements<DimensionType<_dim, T>> {
+    using dim = _dim;
+    using value_type = T;
+};
+
+template <class DT>
+using get_dim_t = typename get_elements<DT>::dim;
+
+template <class DT>
+using get_value_type_t = typename get_elements<DT>::value_type;
+}  // namespace Impl
+
+#undef DECLARE_BINARY_BOOL_OPERATOR
 
 }  // namespace Unit

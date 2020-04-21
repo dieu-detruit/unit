@@ -13,6 +13,7 @@ int main()
     double s = std::sin(phi);
 
     Vel v = 1.0_mm / 1.0_s;
+    Vel v2 = 1.0_mm / 1.0_s + v;
     Acc a = 1.0_km / 1.0_s / 1.0_s;
     Energy E = 1.00555_J;
 

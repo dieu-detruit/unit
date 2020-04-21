@@ -12,23 +12,6 @@ namespace Unit
 
 namespace Impl
 {
-template <typename T>
-struct get_elements {
-    using dim = std::nullptr_t;
-    using value_type = T;
-};
-
-template <class _dim, typename T>
-struct get_elements<DimensionType<_dim, T>> {
-    using dim = _dim;
-    using value_type = T;
-};
-
-template <class DT>
-using get_dim_t = typename get_elements<DT>::dim;
-
-template <class DT>
-using get_value_type_t = typename get_elements<DT>::value_type;
 
 template <class dim_type>
 struct has_literal {
@@ -38,7 +21,6 @@ template <class dim_type>
 struct literal_of {
     static constexpr std::nullptr_t get = nullptr;
 };
-
 
 }  // namespace Impl
 
@@ -111,5 +93,8 @@ DECLARE_LITERAL(Frequency, hertz, Hz)
 
 DECLARE_LITERAL_SQ(Area, meter, m)
 
+#undef DECLARE_LITERAL_IMPL
+#undef DECLARE_LITERAL_SQ
+#undef DECLARE_LITERAL
 
 }  // namespace Unit
