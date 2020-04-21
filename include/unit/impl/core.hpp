@@ -30,7 +30,7 @@ private:
     using holder_type = ValueHolder<dim, value_type>;
 
 public:
-    constexpr DimensionType() : holder_type(value_type(1)) {}
+    constexpr DimensionType() : holder_type(value_type(0)) {}
     constexpr DimensionType(const DimensionType& lhs) : holder_type(lhs.value) {}
     constexpr DimensionType(const DimensionType&& rhs) : holder_type(rhs.value) {}
     explicit constexpr DimensionType(value_type value) : holder_type(value) {}
