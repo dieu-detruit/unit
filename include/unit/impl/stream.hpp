@@ -1,4 +1,5 @@
 #include "unit/impl/core.hpp"
+#include "unit/impl/dimension.hpp"
 #include "unit/impl/literal.hpp"
 #include "unit/impl/type_traits.hpp"
 
@@ -29,8 +30,7 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
     std::string str;
 
-    using dim_t = Impl::get_dim_t<dim_type>;
-    using dims = Impl::get_dimensions<dim_t>;
+    using dims = get_dimensions<typename dim_type::dim_t>;
 
     SINGLE_DIM_TO_STR(str, dims::L, m);
     SINGLE_DIM_TO_STR(str, dims::M, kg);

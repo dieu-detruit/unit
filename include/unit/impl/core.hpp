@@ -30,6 +30,10 @@ private:
     using holder_type = ValueHolder<dim, value_type>;
 
 public:
+    using type = this_type;
+    using dim_t = dim;
+    using value_t = value_type;
+
     constexpr DimensionType() : holder_type(value_type(0)) {}
     constexpr DimensionType(const DimensionType& lhs) : holder_type(lhs.value) {}
     constexpr DimensionType(const DimensionType&& rhs) : holder_type(rhs.value) {}
@@ -130,25 +134,6 @@ public:
 namespace Impl
 {
 
-template <typename T>
-struct get_elements {
-    using dim = std::nullptr_t;
-    using value_type = T;
-};
-
-template <class _dim, typename T>
-struct get_elements<DimensionType<_dim, T>> {
-    using dim = _dim;
-    using value_type = T;
-};
-
-template <class DT>
-using get_dim_t = typename get_elements<DT>::dim;
-
-template <class DT>
-using get_value_type_t = typename get_elements<DT>::value_type;
-}  // namespace Impl
-
 template <class T>
 struct is_dim_type {
     static constexpr bool value = false;
@@ -160,5 +145,7 @@ struct is_dim_type<DimensionType<dim, value_type>> {
 };
 
 #undef DECLARE_BINARY_BOOL_OPERATOR
+
+}  // namespace Impl
 
 }  // namespace Unit

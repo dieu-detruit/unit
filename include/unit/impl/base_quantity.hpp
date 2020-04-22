@@ -11,21 +11,21 @@ constexpr auto _cast(long double c) { return static_cast<_unit_value_type>(c); }
 
 #define DECLARE_CONST_BASE(dim, name) inline constexpr dim name{_cast(1.0L)};
 #define DECLARE_CONST_IMPL(dim, prefix, name, mag) \
-    inline constexpr dim prefix##name = mag * name;
+    inline constexpr dim prefix##name = static_cast<_unit_value_type>((mag)) * name;
 #define DECLARE_CONST_FROM_VALUE(dim, name, value) inline constexpr dim name{value};
 
-#define DECLARE_CONST(dim, name)                                                  \
-    DECLARE_CONST_BASE(dim, name)                                                 \
-    DECLARE_CONST_IMPL(dim, femto, name, static_cast<_unit_value_type>(1.0e-15L)) \
-    DECLARE_CONST_IMPL(dim, pico, name, static_cast<_unit_value_type>(1.0e-12L))  \
-    DECLARE_CONST_IMPL(dim, nano, name, static_cast<_unit_value_type>(1.0e-9L))   \
-    DECLARE_CONST_IMPL(dim, micro, name, static_cast<_unit_value_type>(1.0e-6L))  \
-    DECLARE_CONST_IMPL(dim, milli, name, static_cast<_unit_value_type>(1.0e-3L))  \
-    DECLARE_CONST_IMPL(dim, kilo, name, static_cast<_unit_value_type>(1.0e+3L))   \
-    DECLARE_CONST_IMPL(dim, mega, name, static_cast<_unit_value_type>(1.0e+6L))   \
-    DECLARE_CONST_IMPL(dim, giga, name, static_cast<_unit_value_type>(1.0e+9L))   \
-    DECLARE_CONST_IMPL(dim, tera, name, static_cast<_unit_value_type>(1.0e+12L))  \
-    DECLARE_CONST_IMPL(dim, peta, name, static_cast<_unit_value_type>(1.0e+15L))
+#define DECLARE_CONST(dim, name)                   \
+    DECLARE_CONST_BASE(dim, name)                  \
+    DECLARE_CONST_IMPL(dim, femto, name, 1.0e-15L) \
+    DECLARE_CONST_IMPL(dim, pico, name, 1.0e-12L)  \
+    DECLARE_CONST_IMPL(dim, nano, name, 1.0e-9L)   \
+    DECLARE_CONST_IMPL(dim, micro, name, 1.0e-6L)  \
+    DECLARE_CONST_IMPL(dim, milli, name, 1.0e-3L)  \
+    DECLARE_CONST_IMPL(dim, kilo, name, 1.0e+3L)   \
+    DECLARE_CONST_IMPL(dim, mega, name, 1.0e+6L)   \
+    DECLARE_CONST_IMPL(dim, giga, name, 1.0e+9L)   \
+    DECLARE_CONST_IMPL(dim, tera, name, 1.0e+12L)  \
+    DECLARE_CONST_IMPL(dim, peta, name, 1.0e+15L)
 
 // SI Base Units
 DECLARE_CONST(Length, meter)

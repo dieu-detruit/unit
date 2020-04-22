@@ -25,18 +25,18 @@ struct literal_of {
 }  // namespace Impl
 
 
-#define DECLARE_LITERAL_IMPL_LI(unit_type, constant, literal)                 \
-    inline constexpr unit_type operator""_##literal(long double value)        \
-    {                                                                         \
-        return static_cast<typename Impl::get_value_type_t<unit_type>>(value) \
-               * constant;                                                    \
+#define DECLARE_LITERAL_IMPL_LI(unit_type, constant, literal)          \
+    inline constexpr unit_type operator""_##literal(long double value) \
+    {                                                                  \
+        return static_cast<typename unit_type::value_t>(value)         \
+               * constant;                                             \
     }
 
-#define DECLARE_LITERAL_IMPL_SQ(unit_type, constant, literal)                 \
-    inline constexpr unit_type operator""_##literal##2(long double value)     \
-    {                                                                         \
-        return static_cast<typename Impl::get_value_type_t<unit_type>>(value) \
-               * (constant * constant);                                       \
+#define DECLARE_LITERAL_IMPL_SQ(unit_type, constant, literal)             \
+    inline constexpr unit_type operator""_##literal##2(long double value) \
+    {                                                                     \
+        return static_cast<typename unit_type::value_t>(value)            \
+               * (constant * constant);                                   \
     }
 
 #define DECLARE_LITERAL_SET_IMPL(DIM, unit_type, constant, literal, literal_str) \
