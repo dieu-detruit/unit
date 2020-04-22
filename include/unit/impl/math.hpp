@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "unit/impl/quantity.hpp"
+#include "unit/impl/types.hpp"
 
 namespace Unit
 {

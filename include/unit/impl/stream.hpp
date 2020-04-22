@@ -24,15 +24,21 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
         var += std::string(#literal) + "^" + std::to_string(dim); \
     }
 
-template <int M, int K, int S, int A, typename T, ONLY_IF((not has_literal<DimensionType<Dim<M, K, S, A>, T>>::value))>
-std::string dimension_to_str([[maybe_unused]] const DimensionType<Dim<M, K, S, A>, T>&)
+template <class dim_type, ONLY_IF(not has_literal<dim_type>::value)>
+std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
     std::string str;
 
-    SINGLE_DIM_TO_STR(str, M, m);
-    SINGLE_DIM_TO_STR(str, K, kg);
-    SINGLE_DIM_TO_STR(str, S, s);
-    SINGLE_DIM_TO_STR(str, A, A);
+    using dim_t = Impl::get_dim_t<dim_type>;
+    using dims = Impl::get_dimensions<dim_t>;
+
+    SINGLE_DIM_TO_STR(str, dims::L, m);
+    SINGLE_DIM_TO_STR(str, dims::M, kg);
+    SINGLE_DIM_TO_STR(str, dims::T, s);
+    SINGLE_DIM_TO_STR(str, dims::Theta, K);
+    SINGLE_DIM_TO_STR(str, dims::N, mol);
+    SINGLE_DIM_TO_STR(str, dims::I, A);
+    SINGLE_DIM_TO_STR(str, dims::J, cd);
 
     return str;
 }

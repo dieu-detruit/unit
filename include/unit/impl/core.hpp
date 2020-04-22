@@ -149,6 +149,16 @@ template <class DT>
 using get_value_type_t = typename get_elements<DT>::value_type;
 }  // namespace Impl
 
+template <class T>
+struct is_dim_type {
+    static constexpr bool value = false;
+};
+
+template <class dim, typename value_type>
+struct is_dim_type<DimensionType<dim, value_type>> {
+    static constexpr bool value = true;
+};
+
 #undef DECLARE_BINARY_BOOL_OPERATOR
 
 }  // namespace Unit

@@ -12,10 +12,12 @@ int main()
 
     double s = std::sin(phi);
 
-    Vel v = 1.0_mm / 1.0_s;
-    Vel v2 = 1.0_mm / 1.0_s + v;
-    Acc a = 1.0_km / 1.0_s / 1.0_s;
-    Energy E = 1.00555_J;
+    Velocity v = 1.0_mm / 1.0_s;
+    Velocity v2 = 1.0_mm / 1.0_s + v;
+    Acceleration a = 1.0_km / 1.0_s / 1.0_s;
+    auto I = 1.0e+3_cd;
+
+    Energy E = 1.0_keV;
 
     std::cout << v << std::endl;
     std::cout << a << std::endl;
