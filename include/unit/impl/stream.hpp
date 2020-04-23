@@ -1,3 +1,5 @@
+#pragma once
+
 #include "unit/impl/core.hpp"
 #include "unit/impl/dimension.hpp"
 #include "unit/impl/literal.hpp"

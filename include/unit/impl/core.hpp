@@ -52,9 +52,9 @@ public:
         this->value += right.value;
         return *this;
     }
-    constexpr this_type& operator/=(this_type right)
+    constexpr this_type& operator-=(this_type right)
     {
-        this->value += right.value;
+        this->value -= right.value;
         return *this;
     }
     template <class T, ONLY_IF(std::is_arithmetic_v<T>)>
@@ -69,6 +69,16 @@ public:
     {
         static_assert(is_multiplicable_v<value_type, T>, "You can only devide with floating pointthis->value.");
         this->value /= scalar;
+        return *this;
+    }
+    constexpr this_type& operator*=(DimensionType<DimensionLess, value_type> scalar)
+    {
+        this->value *= scalar.value;
+        return *this;
+    }
+    constexpr this_type& operator/=(DimensionType<DimensionLess, value_type> scalar)
+    {
+        this->value /= scalar.value;
         return *this;
     }
 
