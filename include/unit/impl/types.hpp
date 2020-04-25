@@ -7,14 +7,16 @@
 namespace Unit
 {
 
+inline constexpr int _idx = 1;
+
 // SI Base Unit Types
-using Length = /*----------- L */ DimensionType<Dim<1, 0, 0, 0, 0, 0, 0>, _unit_value_type>;
-using Mass = /*------------- M */ DimensionType<Dim<0, 1, 0, 0, 0, 0, 0>, _unit_value_type>;
-using Time = /*------------- T */ DimensionType<Dim<0, 0, 1, 0, 0, 0, 0>, _unit_value_type>;
-using Temperature = /*-- Theta */ DimensionType<Dim<0, 0, 0, 1, 0, 0, 0>, _unit_value_type>;
-using Amount = /*----------- N */ DimensionType<Dim<0, 0, 0, 0, 1, 0, 0>, _unit_value_type>;
-using Current = /*---------- I */ DimensionType<Dim<0, 0, 0, 0, 0, 1, 0>, _unit_value_type>;
-using LuminousIntensity = /* J */ DimensionType<Dim<0, 0, 0, 0, 0, 0, 1>, _unit_value_type>;
+using Length = /*----------- L */ DimensionType<Dim<_idx, 1, 0, 0, 0, 0, 0, 0>, _unit_value_type>;
+using Mass = /*------------- M */ DimensionType<Dim<_idx, 0, 1, 0, 0, 0, 0, 0>, _unit_value_type>;
+using Time = /*------------- T */ DimensionType<Dim<_idx, 0, 0, 1, 0, 0, 0, 0>, _unit_value_type>;
+using Temperature = /*-- Theta */ DimensionType<Dim<_idx, 0, 0, 0, 1, 0, 0, 0>, _unit_value_type>;
+using Amount = /*----------- N */ DimensionType<Dim<_idx, 0, 0, 0, 0, 1, 0, 0>, _unit_value_type>;
+using Current = /*---------- I */ DimensionType<Dim<_idx, 0, 0, 0, 0, 0, 1, 0>, _unit_value_type>;
+using LuminousIntensity = /* J */ DimensionType<Dim<_idx, 0, 0, 0, 0, 0, 0, 1>, _unit_value_type>;
 using DimensionLessType = /* 1 */ DimensionType<DimensionLess, _unit_value_type>;
 
 // Derived Unit Types
