@@ -20,11 +20,16 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
     return literal_of<dim_type>::get();
 }
 
-#define SINGLE_DIM_TO_STR(var, dim, literal)                      \
-    if constexpr (dim == 1) {                                     \
-        var += #literal;                                          \
-    } else if (dim != 0) {                                        \
-        var += std::string(#literal) + "^" + std::to_string(dim); \
+#define SINGLE_DIM_TO_STR(var, den, dim, literal)                                                        \
+    if constexpr (dim != 0) {                                                                            \
+        if (dim == den) {                                                                                \
+            var += #literal;                                                                             \
+        } else if (dim % den == 0) {                                                                     \
+            var += std::string(#literal) + "^" + std::to_string(dim / den);                              \
+        } else {                                                                                         \
+            constexpr int g = Impl::gcd(dim, den);                                                       \
+            var += std::string(#literal) + "^(" + std::to_string(dim) + "/" + std::to_string(den) + ")"; \
+        }                                                                                                \
     }
 
 template <class dim_type, ONLY_IF(not has_literal<dim_type>::value)>
@@ -34,13 +39,13 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
 
     using dims = get_dimensions<typename dim_type::dim_t>;
 
-    SINGLE_DIM_TO_STR(str, dims::L, m);
-    SINGLE_DIM_TO_STR(str, dims::M, kg);
-    SINGLE_DIM_TO_STR(str, dims::T, s);
-    SINGLE_DIM_TO_STR(str, dims::Theta, K);
-    SINGLE_DIM_TO_STR(str, dims::N, mol);
-    SINGLE_DIM_TO_STR(str, dims::I, A);
-    SINGLE_DIM_TO_STR(str, dims::J, cd);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::L, m);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::M, kg);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::T, s);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::Theta, K);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::N, mol);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::I, A);
+    SINGLE_DIM_TO_STR(str, dims::den, dims::J, cd);
 
     return str;
 }
