@@ -1,5 +1,7 @@
 #pragma once
 
+#include "unit/impl/utility.hpp"
+
 namespace Unit
 {
 
@@ -15,32 +17,6 @@ namespace Unit
  * J :      Luminous Intensity
  *
  */
-
-namespace Impl
-{
-constexpr int abs(int x)
-{
-    return x > 0 ? x : -x;
-}
-constexpr int gcd(int a, int b)
-{
-    if (a == 0) {
-        return b;
-    }
-    if (b == 0) {
-        return a;
-    }
-
-    return abs(a) > abs(b) ? gcd(b, a % b) : gcd(a, b % a);
-}
-template <class... Args>
-constexpr int gcd(int a, int b, Args... args)
-{
-    return gcd(gcd(a, b), args...);
-}
-
-}  // namespace Impl
-
 
 /* 
  * Struct to express the dimension
@@ -77,28 +53,20 @@ public:
     {
         return {};
     }
-};
 
-template <int n_>
-struct pow_exponent {
-    static constexpr int n = n_;
+    template <int n>
+    static auto pow()
+        -> typename Dim<den, (U * n)...>::irrep_type
+    {
+        return {};
+    }
+    template <int d>
+    static auto root()
+        -> typename Dim<den * d, U...>::irrep_type
+    {
+        return {};
+    }
 };
-template <int d_>
-struct pow_exponent_inv {
-    static constexpr int d = d_;
-};
-
-template <class ex, int n = ex::n, int... U>
-auto pow(Dim<U...>, ex)
-    -> typename Dim<(U * n)...>::irrep_type
-{
-}
-template <class ex, int d = ex::d, int... U>
-auto pow(Dim<U...>, ex)
-    -> typename Dim<(U / d)...>::irrep_type
-{
-}
-
 
 using DimensionLess = Dim<1, 0, 0, 0, 0, 0, 0, 0>;
 

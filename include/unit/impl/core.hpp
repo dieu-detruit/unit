@@ -1,9 +1,9 @@
 #pragma once
 
 #include "unit/impl/dimension.hpp"
-#include "unit/impl/type_traits.hpp"
+#include "unit/impl/utility.hpp"
 
-#include <iostream>
+#include <cmath>
 #include <type_traits>
 
 namespace Unit
@@ -123,6 +123,30 @@ public:
     constexpr this_type operator-(this_type right) const
     {
         return this_type{this->value - right.value};
+    }
+
+    template <int n>
+    auto pow()
+    {
+        return DimensionType<decltype(dim::template pow<n>()), value_type>{std::pow(this->value, n)};
+    }
+    template <int n, int d>
+    auto pow()
+    {
+        return DimensionType<decltype(decltype(dim::template pow<n>)::template root<d>), value_type>{std::pow(this->value, value_type(n) / d)};
+    }
+    template <int d>
+    auto root()
+    {
+        return DimensionType<decltype(dim::template root<d>()), value_type>{std::pow(this->value, value_type(1) / d)};
+    }
+    auto sqrt()
+    {
+        return DimensionType<decltype(dim::template root<2>()), value_type>{std::sqrt(this->value)};
+    }
+    auto cbrt()
+    {
+        return DimensionType<decltype(dim::template root<3>()), value_type>{std::cbrt(this->value)};
     }
 
     // Binary Bool Operators

@@ -4,7 +4,7 @@
 
 #include "unit/impl/core.hpp"
 #include "unit/impl/dimension.hpp"
-#include "unit/impl/type_traits.hpp"
+#include "unit/impl/utility.hpp"
 
 namespace Unit
 {

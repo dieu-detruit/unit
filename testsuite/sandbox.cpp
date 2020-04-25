@@ -19,9 +19,12 @@ int main()
 
     Energy E = 1.0_keV;
 
+    auto rtE = E.sqrt();
+
     std::cout << v << std::endl;
     std::cout << a << std::endl;
     std::cout << E << std::endl;
+    std::cout << rtE << std::endl;
 
     return 0;
 }
