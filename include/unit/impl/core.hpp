@@ -19,7 +19,7 @@ template <typename value_type>
 struct ValueHolder<DimensionLess, value_type> {
     value_type value;
     constexpr ValueHolder(value_type value) : value(value) {}
-    constexpr operator value_type() { return value; }
+    constexpr operator value_type() const { return value; }
 };  // namespace Unit
 
 
@@ -83,11 +83,11 @@ public:
     }
 
     // Unary Arithmetic Operators
-    constexpr this_type operator+()
+    constexpr this_type operator+() const
     {
         return *this;
     }
-    constexpr this_type operator-()
+    constexpr this_type operator-() const
     {
         return this_type{-this->value};
     }
@@ -126,35 +126,35 @@ public:
     }
 
     template <int n>
-    auto pow()
+    auto pow() const
     {
         return DimensionType<decltype(dim::template pow<n>()), value_type>{std::pow(this->value, n)};
     }
     template <int n, int d>
-    auto pow()
+    auto pow() const
     {
         return DimensionType<decltype(decltype(dim::template pow<n>)::template root<d>), value_type>{std::pow(this->value, value_type(n) / d)};
     }
     template <int d>
-    auto root()
+    auto root() const
     {
         return DimensionType<decltype(dim::template root<d>()), value_type>{std::pow(this->value, value_type(1) / d)};
     }
-    auto sqrt()
+    auto sqrt() const
     {
         return DimensionType<decltype(dim::template root<2>()), value_type>{std::sqrt(this->value)};
     }
-    auto cbrt()
+    auto cbrt() const
     {
         return DimensionType<decltype(dim::template root<3>()), value_type>{std::cbrt(this->value)};
     }
 
     // Binary Bool Operators
 
-#define DECLARE_BINARY_BOOL_OPERATOR(op)     \
-    bool operator op(const this_type& right) \
-    {                                        \
-        return this->value op right.value;   \
+#define DECLARE_BINARY_BOOL_OPERATOR(op)           \
+    bool operator op(const this_type& right) const \
+    {                                              \
+        return this->value op right.value;         \
     }
 
     DECLARE_BINARY_BOOL_OPERATOR(==)

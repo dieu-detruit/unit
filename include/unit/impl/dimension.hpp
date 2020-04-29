@@ -41,14 +41,14 @@ public:
     using irrep_type = Dim<den / g, (U / g)...>;
 
     template <int den_, int... U_>
-    auto operator*(const Dim<den_, U_...>& rhs)
+    auto operator*(const Dim<den_, U_...>& rhs) const
         -> typename Dim<den * den_, (den_ * U + den * U_)...>::irrep_type
     {
         return {};
     }
 
     template <int den_, int... U_>
-    auto operator/(const Dim<den_, U_...>& rhs)
+    auto operator/(const Dim<den_, U_...>& rhs) const
         -> typename Dim<den * den_, (den_ * U - den * U_)...>::irrep_type
     {
         return {};

@@ -8,16 +8,16 @@ int main()
 
     using namespace Unit;
 
-    Phase phi = 1.0_rad;
+    constexpr Phase phi = 1.0_rad;
 
     double s = std::sin(phi);
 
-    Velocity v = 1.0_mm / 1.0_s;
-    Velocity v2 = 1.0_mm / 1.0_s + v;
-    Acceleration a = 1.0_km / 1.0_s / 1.0_s;
-    auto I = 1.0e+3_cd;
+    constexpr Velocity v = 1.0_mm / 1.0_s;
+    constexpr Velocity v2 = 1.0_mm / 1.0_s + v;
+    constexpr Acceleration a = 1.0_km / 1.0_s / 1.0_s;
+    constexpr auto I = 1.0e+3_cd;
 
-    Energy E = 1.0_keV;
+    constexpr Energy E = 1.0_keV;
 
     auto rtE = E.sqrt();
 
