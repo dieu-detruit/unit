@@ -5,8 +5,8 @@
 namespace Unit
 {
 
-#define ONLY_IF(cond) std::enable_if_t<cond, std::nullptr_t> = nullptr
-#define PROHIBIT(cond) std::enable_if_t<cond, std::nullptr_t> = nullptr
+#define ONLY_IF_IMPL(cond) std::enable_if_t<cond, std::nullptr_t> = nullptr
+#define ONLY_IF(...) ONLY_IF_IMPL((__VA_ARGS__))
 
 template <typename value_type, typename arg_type>
 inline constexpr bool is_multiplicable_v
@@ -35,6 +35,10 @@ constexpr int gcd(int a, int b, Args... args)
 {
     return gcd(gcd(a, b), args...);
 }
+
+template <typename T>
+struct is_complex {
+};
 
 }  // namespace Impl
 

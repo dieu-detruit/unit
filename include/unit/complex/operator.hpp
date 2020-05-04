@@ -8,28 +8,34 @@
 namespace Unit
 {
 
-template <class dim_type>
-auto operator+(typename dim_type::value_t left, Complex<dim_type> right)  // value_t + Complex<dim_type> = Complex<dim_type>
+// complex * real_dim_type
+template <class dim, typename value_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>
+constexpr auto operator*(std::complex<T> c, DimensionType<dim, value_type> right)
 {
-    return Complex<dim_type>{left + right._real, right._imag};
+    static_assert(is_multiplicable_v<value_type, T>, "You can only multiply floating point value.");
+    return DimensionType<dim, std::complex<value_type>>{c * right.value};
+}
+// complex * complex_dim_type
+template <class dim, typename value_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>
+constexpr auto operator*(std::complex<T> c, DimensionType<dim, std::complex<value_type>> right)
+{
+    static_assert(is_multiplicable_v<value_type, T>, "You can only multiply floating point value.");
+    return DimensionType<dim, std::complex<value_type>>{c * right.value};
 }
 
-template <class dim_type>
-auto operator-(typename dim_type::value_t left, Complex<dim_type> right)  // value_t - Complex<dim_type> = Complex<dim_type>
+// complex / dim_type
+template <class dim, typename value_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>
+constexpr auto operator/(std::complex<T> c, DimensionType<dim, value_type> right)
 {
-    return Complex<dim_type>{left - right._real, -right._imag};
+    static_assert(is_multiplicable_v<value_type, T>, "You can only devide with floating point value.");
+    return DimensionType<decltype(DimensionLess{} / dim{}), value_type>{c / right.value};
 }
-
-template <class dim_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>  // T * Complex<dim_type> = Complex<dim_type>
-auto operator*(T left, Complex<dim_type> right)
+// complex / complex_dim_type
+template <class dim, typename value_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>
+constexpr auto operator/(std::complex<T> c, DimensionType<dim, std::complex<value_type>> right)
 {
-    return Complex<dim_type>{left * right._real, left * right._imag};
-}
-
-template <class dim_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>  // T * Complex<dim_type> = Complex<1 / dim_type>
-auto operator/(T left, Complex<dim_type> right)
-{
-    return Complex<decltype(DimensionLessType{} / dim_type{})>{left / right._real, left / right._imag};
+    static_assert(is_multiplicable_v<value_type, T>, "You can only devide with floating point value.");
+    return DimensionType<decltype(DimensionLess{} / dim{}), std::complex<value_type>>{c / right.value};
 }
 
 }  // namespace Unit

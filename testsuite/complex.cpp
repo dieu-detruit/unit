@@ -24,25 +24,20 @@ int main()
     DEBUG_LOG(norm);
     DEBUG_LOG(phase);
 
-    Complex mul = (5.0 + 3.0_j) * (1.0 + 1.0_j);
-    DEBUG_LOG(mul);
-
     DEBUG_LOG(polar(1.0, 0.5 * 3.14159265358979_rad));
     wavefront *= polar(1.0, 0.5 * 3.14159265358979_rad);
     DEBUG_LOG(wavefront);
 
-    Complex c1 = 1.0 + 2.0_i;
-    Complex c2 = 2.0 + 3.0_j;
-    Complex c3 = c1 + c2;
-    Complex c4 = c1 / c2;
+    Complex<Length> c1 = (1.0 + 2.0i) * 1.0_m;
+    Complex<Length> c2 = (2.0 + 3.0i) * 1.0_m;
+    Complex<Length> c3 = c1 + c2;
+    std::complex<double> c4 = c1 / c2;
 
-    double n1 = c1.norm();
-    double n2 = c2.norm_square();
+    Length n1 = c1.norm();
 
     DEBUG_LOG(c1);
     DEBUG_LOG(c2);
     DEBUG_LOG(n1);
-    DEBUG_LOG(n2);
 
     return 0;
 }
