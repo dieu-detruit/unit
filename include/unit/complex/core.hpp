@@ -50,6 +50,8 @@ public:
     constexpr DimensionType(const this_type& lhs) : value(lhs.value) {}
     constexpr DimensionType(const this_type&& rhs) : value(rhs.value) {}
     constexpr DimensionType(const real_type& real, const real_type& imag) : value{complex_type(real.value, imag.value)} {}
+    constexpr DimensionType(const real_type& real) : value{complex_type(real.value, 0.0)} {}
+    constexpr DimensionType(const real_type&& real) : value{complex_type(real.value, 0.0)} {}
     explicit constexpr DimensionType(complex_type value) : value(value) {}
     explicit constexpr DimensionType(value_type real, value_type imag) : value{complex_type(real, imag)} {}
 
