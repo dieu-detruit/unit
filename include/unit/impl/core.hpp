@@ -28,11 +28,11 @@ public:
     constexpr DimensionType(const DimensionType&& rhs) : value(rhs.value) {}
     explicit constexpr DimensionType(value_type value) : value(value) {}
 
-    template <class T, ONLY_IF(std::is_same_v<T, value_type>)>
+    template <class T, ONLY_IF(std::is_convertible_v<T, value_type>)>
     constexpr operator T() const
     {
         static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
-        return value;
+        return static_cast<T>(value);
     }
 
 // Substitution Operators

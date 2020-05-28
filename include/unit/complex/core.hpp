@@ -54,8 +54,8 @@ public:
     explicit constexpr DimensionType(value_type real, value_type imag) : value{complex_type(real, imag)} {}
 
     // Cast Operators
-    template <class T, ONLY_IF(std::is_same_v<T, std::complex<value_type>>)>
-    constexpr operator T() const
+    template <class T, ONLY_IF(std::is_convertible_v<T, value_type>)>
+    constexpr operator std::complex<T>() const
     {
         static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
         return value;
@@ -197,7 +197,7 @@ public:
     bool operator!=(const real_type& right) const { return value.real() != right.value or value.imag() != value_type(0); }
 
     // Static Construc Function
-    static constexpr auto polar(Impl::polar_arg_t<real_type> norm, Phase phase) { return this_type{norm * std::cos(phase), norm * std::sin(phase)}; }
+    static constexpr auto polar(Impl::polar_arg_t<real_type> norm, Phase phase) { return this_type{norm * std::cos(phase.value), norm * std::sin(phase.value)}; }
 
     // Getter (Setter as a lvalue)
     constexpr auto real() { return real_type{value.real()}; }
