@@ -133,7 +133,7 @@ public:
     template <class dim_>                                                                                \
     constexpr auto operator op(DimensionType<dim_, value_type> right) const                              \
     {                                                                                                    \
-        return DimensionType<decltype(dim {} op dim_{}), value_type>{value op right.value};              \
+        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value};            \
     }                                                                                                    \
     template <class dim_>                                                                                \
     constexpr auto operator op(DimensionType<dim_, complex_type> right) const                            \
