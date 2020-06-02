@@ -24,8 +24,8 @@ int main()
     DEBUG_LOG(norm);
     DEBUG_LOG(phase);
 
-    DEBUG_LOG(polar(1.0, 0.5 * 3.14159265358979_rad));
-    wavefront *= polar(1.0, 0.5 * 3.14159265358979_rad);
+    DEBUG_LOG(std::polar(1.0, 0.5 * 3.14159265358979_rad));
+    wavefront *= std::polar(1.0, 0.5 * 3.14159265358979_rad);
     DEBUG_LOG(wavefront);
 
     Complex<Length> c1 = (1.0 + 2.0i) * 1.0_m;

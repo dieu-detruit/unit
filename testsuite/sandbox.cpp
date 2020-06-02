@@ -10,7 +10,7 @@ int main()
 
     constexpr Phase phi = 1.0_rad;
 
-    double s = std::sin(phi);
+    //double s = std::sin(phi);
 
     constexpr Velocity v = 1.0_mm / 1.0_s;
     constexpr Velocity v2 = 1.0_mm / 1.0_s + v;

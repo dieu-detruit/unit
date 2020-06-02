@@ -10,4 +10,6 @@ namespace Unit
 template <class dim_type>
 using Complex = DimensionType<typename dim_type::dim_t, std::complex<typename dim_type::value_t>>;
 
+using _complex_unit_value_type = std::complex<_unit_value_type>;
+
 }  // namespace Unit

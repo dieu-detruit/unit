@@ -11,5 +11,6 @@
 
 #include "unit/complex/core.hpp"
 #include "unit/complex/operator.hpp"
+#include "unit/complex/std_overload.hpp"
 #include "unit/complex/stream.hpp"
 #include "unit/complex/types.hpp"

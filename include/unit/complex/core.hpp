@@ -216,18 +216,8 @@ public:
     constexpr auto conj() { return this_type{std::conj(value)}; }
     Phase arg() { return Phase{std::arg(value)}; }
     auto norm() { return real_type{std::norm(value)}; }
+    auto abs() { return real_type{std::abs(value)}; }
 };
-
-template <class dim_type>
-auto polar(dim_type norm, Phase phase)
-{
-    return DimensionType<typename dim_type::dim_t, std::complex<typename dim_type::value_t>>{std::polar(norm.value, phase.value)};
-}
-
-auto polar(_unit_value_type norm, Phase phase)
-{
-    return DimensionType<DimensionLess, std::complex<_unit_value_type>>{std::polar(norm, phase.value)};
-}
 
 #undef DECLARE_SUBSTITUTION_OPERATOR
 #undef DECLARE_SCALE_SUBSTITUTION_OPERATOR
