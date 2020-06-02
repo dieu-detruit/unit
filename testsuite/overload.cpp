@@ -26,5 +26,7 @@ int main()
     DEBUG_LOG(norm);
     DEBUG_LOG(abs);
 
+    Phase hoge = std::polar(1.0_rad, 1.0_rad);
+
     return 0;
 }
