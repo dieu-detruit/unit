@@ -15,7 +15,7 @@ int main()
     Length real = wavefront.real();
     Length imag = wavefront.imag();
     Complex<Length> conj = wavefront.conj();
-    Length norm = wavefront.norm();
+    auto norm = wavefront.norm();
     Phase phase = wavefront.arg();
 
     DEBUG_LOG(real);
@@ -33,7 +33,7 @@ int main()
     Complex<Length> c3 = c1 + c2;
     std::complex<double> c4 = c1 / c2;
 
-    Length n1 = c1.norm();
+    auto n1 = c1.norm();
 
     DEBUG_LOG(c1);
     DEBUG_LOG(c2);

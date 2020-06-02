@@ -37,6 +37,7 @@ private:
     using complex_type = std::complex<value_type>;
     using this_type = DimensionType<dim, std::complex<value_type>>;
     using real_type = DimensionType<dim, value_type>;
+    using norm_type = DimensionType<decltype(dim{} * dim{}), value_type>;
 
 public:
     using type = this_type;
@@ -215,7 +216,7 @@ public:
     // Basic functions for Complex quantity
     constexpr auto conj() { return this_type{std::conj(value)}; }
     Phase arg() { return Phase{std::arg(value)}; }
-    auto norm() { return real_type{std::norm(value)}; }
+    auto norm() { return norm_type{std::norm(value)}; }
     auto abs() { return real_type{std::abs(value)}; }
 };
 

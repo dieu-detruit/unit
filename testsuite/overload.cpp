@@ -16,7 +16,7 @@ int main()
     Length imag = std::imag(wavefront);
     Complex<Length> conj = std::conj(wavefront);
     Phase arg = std::arg(wavefront);
-    Length norm = std::norm(wavefront);
+    auto norm = std::norm(wavefront);
     Length abs = std::abs(wavefront);
 
     DEBUG_LOG(conj);
