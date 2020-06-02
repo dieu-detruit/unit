@@ -1,7 +1,12 @@
+#pragma once
+
+#include <complex>
+#include <type_traits>
+
 #include "unit/complex/core.hpp"
 #include "unit/complex/types.hpp"
 #include "unit/impl/types.hpp"
-#include <complex>
+#include "unit/impl/utility.hpp"
 
 namespace Unit
 {
@@ -41,7 +46,7 @@ auto abs(Unit::DimensionType<dim_t, Unit::_complex_unit_value_type> c)
     return c.abs();
 }
 
-template <class dim_type>
+template <class dim_type, ONLY_IF(not std::is_same_v<dim_type, Unit::Phase>)>
 auto polar(dim_type norm, Unit::Phase phase)
 {
     return Unit::DimensionType<typename dim_type::dim_t, std::complex<typename dim_type::value_t>>{std::polar(norm.value, phase.value)};
