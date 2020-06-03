@@ -47,18 +47,18 @@ public:
     DECLARE_SUBSTITUTION_OPERATOR(+=);  // this_type += this_type
     DECLARE_SUBSTITUTION_OPERATOR(-=);  // this_type -= this_type
 
-#define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                          \
-    template <class T, ONLY_IF(std::is_arithmetic_v<T>)>                                                 \
-    constexpr this_type& operator op(T scalar)                                                           \
-    {                                                                                                    \
-        static_assert(is_multiplicable_v<value_type, T>, "You can only multiply floating point value."); \
-        value op scalar;                                                                                 \
-        return *this;                                                                                    \
-    }                                                                                                    \
-    constexpr this_type& operator op(DimensionType<DimensionLess, value_type> scalar)                    \
-    {                                                                                                    \
-        value op scalar.value;                                                                           \
-        return *this;                                                                                    \
+#define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                             \
+    template <class T, ONLY_IF(std::is_arithmetic_v<T>)>                                                    \
+    constexpr this_type& operator op(T scalar)                                                              \
+    {                                                                                                       \
+        static_assert(std::is_convertible_v<value_type, T>, "You can only multiply floating point value."); \
+        value op scalar;                                                                                    \
+        return *this;                                                                                       \
+    }                                                                                                       \
+    constexpr this_type& operator op(DimensionType<DimensionLess, value_type> scalar)                       \
+    {                                                                                                       \
+        value op scalar.value;                                                                              \
+        return *this;                                                                                       \
     }
 
     DECLARE_SCALE_SUBSTITUTION_OPERATOR(*=);
@@ -69,22 +69,22 @@ public:
     constexpr this_type operator-() const { return this_type{-value}; }
 
 // Binary Arithmetic Operators
-#define DECLARE_SCALE_OPERATOR(op)                                                                        \
-    template <typename T, ONLY_IF(std::is_arithmetic_v<T>)>                                               \
-    constexpr this_type operator op(T scalar) const                                                       \
-    {                                                                                                     \
-        static_assert(is_multiplicable_v<value_type, T>, "You can only multiply floating point value.");  \
-        return this_type{value op scalar};                                                                \
-    }                                                                                                     \
-    template <class dim_>                                                                                 \
-    constexpr auto operator op(DimensionType<dim_, value_type> right) const                               \
-    {                                                                                                     \
-        return DimensionType<decltype(dim {} op dim_{}), value_type>{value op right.value};               \
-    }                                                                                                     \
-    template <class dim_>                                                                                 \
-    constexpr auto operator op(DimensionType<dim_, std::complex<value_type>> right) const                 \
-    {                                                                                                     \
-        return DimensionType<decltype(dim {} op dim_{}), std::complex<value_type>>{value op right.value}; \
+#define DECLARE_SCALE_OPERATOR(op)                                                                                               \
+    template <typename T, ONLY_IF(std::is_arithmetic_v<T>)>                                                                      \
+    constexpr this_type operator op(T scalar) const                                                                              \
+    {                                                                                                                            \
+        static_assert(std::is_convertible_v<value_type, T>, "You can only multiply value of a type convertible to value_type."); \
+        return this_type{value op scalar};                                                                                       \
+    }                                                                                                                            \
+    template <class dim_>                                                                                                        \
+    constexpr auto operator op(DimensionType<dim_, value_type> right) const                                                      \
+    {                                                                                                                            \
+        return DimensionType<decltype(dim {} op dim_{}), value_type>{value op right.value};                                      \
+    }                                                                                                                            \
+    template <class dim_>                                                                                                        \
+    constexpr auto operator op(DimensionType<dim_, std::complex<value_type>> right) const                                        \
+    {                                                                                                                            \
+        return DimensionType<decltype(dim {} op dim_{}), std::complex<value_type>>{value op right.value};                        \
     }
 
 

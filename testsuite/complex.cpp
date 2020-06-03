@@ -38,6 +38,8 @@ int main()
     DEBUG_LOG(c1);
     DEBUG_LOG(c2);
     DEBUG_LOG(n1);
+    DEBUG_LOG(std::sqrt(n1));
+    DEBUG_LOG(n1 * 1);
 
     return 0;
 }

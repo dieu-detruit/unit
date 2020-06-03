@@ -69,7 +69,7 @@ struct literal_of {
     DECLARE_LITERAL_SET_IMPL(LI, unit_type, constant, literal, #literal)
 
 #define DECLARE_LITERAL_SET_SQ(unit_type, constant, literal) \
-    DECLARE_LITERAL_SET_IMPL(SQ, unit_type, constant, literal, #literal "2")
+    DECLARE_LITERAL_SET_IMPL(SQ, unit_type, constant, literal, #literal "^2")
 
 // SI Base Units
 DECLARE_LITERAL_SET(Length, meter, m)
