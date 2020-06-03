@@ -10,7 +10,7 @@ namespace Unit
 {
 
 // c * R
-template <class dim, typename value_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>
+template <class dim, typename value_type, typename T, ONLY_IF(!Impl::is_complex_v<T> && !Impl::is_complex_v<value_type>)>
 constexpr auto operator*(T c, DimensionType<dim, value_type> right)
 {
     static_assert(std::is_convertible_v<value_type, T>, "You can only multiply value of a type convertible to value_type.");
@@ -18,7 +18,7 @@ constexpr auto operator*(T c, DimensionType<dim, value_type> right)
 }
 
 // c / R
-template <class dim, typename value_type, typename T, ONLY_IF(std::is_arithmetic_v<T>)>
+template <class dim, typename value_type, typename T, ONLY_IF(!Impl::is_complex_v<T> && !Impl::is_complex_v<value_type>)>
 constexpr auto operator/(T c, DimensionType<dim, value_type> right)
 {
     static_assert(std::is_convertible_v<value_type, T>, "You can only multiply value of a type convertible to value_type.");

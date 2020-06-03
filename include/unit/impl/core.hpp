@@ -48,10 +48,10 @@ public:
     DECLARE_SUBSTITUTION_OPERATOR(-=);  // this_type -= this_type
 
 #define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                             \
-    template <class T, ONLY_IF(std::is_arithmetic_v<T>)>                                                    \
+    template <class T>                                                                                      \
     constexpr this_type& operator op(T scalar)                                                              \
     {                                                                                                       \
-        static_assert(std::is_convertible_v<value_type, T>, "You can only multiply floating point value."); \
+        static_assert(std::is_convertible_v<T, value_type>, "You can only multiply floating point value."); \
         value op scalar;                                                                                    \
         return *this;                                                                                       \
     }                                                                                                       \
@@ -73,7 +73,7 @@ public:
     template <typename T, ONLY_IF(std::is_arithmetic_v<T>)>                                                                      \
     constexpr this_type operator op(T scalar) const                                                                              \
     {                                                                                                                            \
-        static_assert(std::is_convertible_v<value_type, T>, "You can only multiply value of a type convertible to value_type."); \
+        static_assert(std::is_convertible_v<T, value_type>, "You can only multiply value of a type convertible to value_type."); \
         return this_type{value op scalar};                                                                                       \
     }                                                                                                                            \
     template <class dim_>                                                                                                        \

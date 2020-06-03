@@ -1,5 +1,6 @@
 #pragma once
 
+#include <complex>
 #include <type_traits>
 
 namespace Unit
@@ -30,6 +31,16 @@ constexpr int gcd(int a, int b, Args... args)
 {
     return gcd(gcd(a, b), args...);
 }
+
+template <class T>
+struct is_complex : public std::false_type {
+};
+template <class T>
+struct is_complex<std::complex<T>> : public std::true_type {
+};
+
+template <class T>
+inline constexpr bool is_complex_v = is_complex<T>::value;
 
 }  // namespace Impl
 
