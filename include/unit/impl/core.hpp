@@ -1,7 +1,7 @@
 #pragma once
 
-#include "unit/impl/dimension.hpp"
-#include "unit/impl/utility.hpp"
+#include <unit/impl/dimension.hpp>
+#include <unit/impl/utility.hpp>
 
 #include <cmath>
 #include <complex>
@@ -10,7 +10,7 @@
 namespace Unit
 {
 
-template <class dim, typename value_type>
+template <class dim, typename value_type = _unit_value_type>
 struct DimensionType {
 private:
     using this_type = DimensionType<dim, value_type>;
@@ -28,10 +28,11 @@ public:
     constexpr DimensionType(const DimensionType&& rhs) : value(rhs.value) {}
     explicit constexpr DimensionType(value_type value) : value(value) {}
 
-    template <class T, ONLY_IF(std::is_convertible_v<T, value_type>)>
+    template <class T, class sfinae_dim = dim, ONLY_IF(std::is_same_v<T, value_type>&& std::is_same_v<sfinae_dim, DimensionLess>)>
     constexpr operator T() const
     {
         static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
+        std::cout << "hoge" << std::endl;
         return static_cast<T>(value);
     }
 
@@ -47,18 +48,18 @@ public:
     DECLARE_SUBSTITUTION_OPERATOR(+=);  // this_type += this_type
     DECLARE_SUBSTITUTION_OPERATOR(-=);  // this_type -= this_type
 
-#define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                             \
-    template <class T>                                                                                      \
-    constexpr this_type& operator op(T scalar)                                                              \
-    {                                                                                                       \
-        static_assert(std::is_convertible_v<T, value_type>, "You can only multiply floating point value."); \
-        value op scalar;                                                                                    \
-        return *this;                                                                                       \
-    }                                                                                                       \
-    constexpr this_type& operator op(DimensionType<DimensionLess, value_type> scalar)                       \
-    {                                                                                                       \
-        value op scalar.value;                                                                              \
-        return *this;                                                                                       \
+#define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                                     \
+    template <class T>                                                                                              \
+    constexpr this_type& operator op(T scalar)                                                                      \
+    {                                                                                                               \
+        static_assert(std::is_convertible_v<T, value_type>, "You can only multiply floating postd::size_t value."); \
+        value op scalar;                                                                                            \
+        return *this;                                                                                               \
+    }                                                                                                               \
+    constexpr this_type& operator op(DimensionType<DimensionLess, value_type> scalar)                               \
+    {                                                                                                               \
+        value op scalar.value;                                                                                      \
+        return *this;                                                                                               \
     }
 
     DECLARE_SCALE_SUBSTITUTION_OPERATOR(*=);
@@ -104,17 +105,17 @@ public:
     DECLARE_ADD_OPERATOR(+);  // this_type + this_type = this_type, this_type + complex_dim_type = complex_dim_type
     DECLARE_ADD_OPERATOR(-);  // this_type - this_type = this_type, this_type - complex_dim_type = complex_dim_type
 
-    template <int n>
+    template <std::size_t n>
     auto pow() const
     {
         return DimensionType<decltype(dim::template pow<n>()), value_type>{std::pow(value, n)};
     }
-    template <int n, int d>
+    template <std::size_t n, std::size_t d>
     auto pow() const
     {
         return DimensionType<decltype(decltype(dim::template pow<n>)::template root<d>), value_type>{std::pow(value, value_type(n) / d)};
     }
-    template <int d>
+    template <std::size_t d>
     auto root() const
     {
         return DimensionType<decltype(dim::template root<d>()), value_type>{std::pow(value, static_cast<value_type>(1) / d)};

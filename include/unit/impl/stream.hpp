@@ -1,9 +1,9 @@
 #pragma once
 
-#include "unit/impl/core.hpp"
-#include "unit/impl/dimension.hpp"
-#include "unit/impl/literal.hpp"
-#include "unit/impl/utility.hpp"
+#include <unit/impl/core.hpp>
+#include <unit/impl/dimension.hpp>
+#include <unit/impl/literal.hpp>
+#include <unit/impl/utility.hpp>
 
 #include <iostream>
 #include <string>
@@ -22,22 +22,22 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
 }
 
 template <class dim_type>
-struct set_dims_integer {
-    static constexpr int den = get_dimensions<typename dim_type::dim_t>::den;
+struct cancel_denominator {
+    static constexpr std::size_t den = get_dimensions<typename dim_type::dim_t>::den;
     using type = DimensionType<
         decltype(dim_type::dim_t::template pow<den>()),
         typename dim_type::value_t>;
 };
 
 template <class dim_type>
-using set_dims_integer_t = typename set_dims_integer<dim_type>::type;
+using cancel_denominator_t = typename cancel_denominator<dim_type>::type;
 
 // Use unique literal if it exists
-template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && has_literal<set_dims_integer_t<dim_type>>::value)>
+template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && has_literal<cancel_denominator_t<dim_type>>::value)>
 std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
-    constexpr int den = set_dims_integer<dim_type>::den;
-    return literal_of<set_dims_integer_t<dim_type>>::get() + "^(1/" + std::to_string(den) + ")";
+    constexpr std::size_t den = cancel_denominator<dim_type>::den;
+    return literal_of<cancel_denominator_t<dim_type>>::get() + "^(1/" + std::to_string(den) + ")";
 }
 
 #define SINGLE_DIM_TO_STR(var, den, dim, literal)                                                        \
@@ -47,12 +47,12 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
         } else if (dim % den == 0) {                                                                     \
             var += std::string(#literal) + "^" + std::to_string(dim / den);                              \
         } else {                                                                                         \
-            constexpr int g = Impl::gcd(dim, den);                                                       \
+            constexpr std::size_t g = Impl::gcd(dim, den);                                               \
             var += std::string(#literal) + "^(" + std::to_string(dim) + "/" + std::to_string(den) + ")"; \
         }                                                                                                \
     }
 
-template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && !has_literal<set_dims_integer_t<dim_type>>::value)>
+template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && !has_literal<cancel_denominator_t<dim_type>>::value)>
 std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
     std::string str;

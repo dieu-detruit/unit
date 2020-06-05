@@ -1,7 +1,7 @@
 #pragma once
 
-#include "unit/impl/base_quantity.hpp"
-#include "unit/impl/types.hpp"
+#include <unit/impl/base_quantity.hpp>
+#include <unit/impl/types.hpp>
 
 namespace Unit::Constant
 {

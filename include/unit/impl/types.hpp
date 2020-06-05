@@ -1,23 +1,23 @@
 #pragma once
 
-#include "unit/impl/core.hpp"
-#include "unit/impl/dimension.hpp"
-#include "unit/impl/operator.hpp"
+#include <unit/impl/core.hpp>
+#include <unit/impl/dimension.hpp>
+#include <unit/impl/operator.hpp>
 
 namespace Unit
 {
 
-inline constexpr int _idx = 1;
+inline constexpr std::size_t _idx = 1;
 
 // SI Base Unit Types
-using Length = /*----------- L */ DimensionType<Dim<_idx, 1, 0, 0, 0, 0, 0, 0>, _unit_value_type>;
-using Mass = /*------------- M */ DimensionType<Dim<_idx, 0, 1, 0, 0, 0, 0, 0>, _unit_value_type>;
-using Time = /*------------- T */ DimensionType<Dim<_idx, 0, 0, 1, 0, 0, 0, 0>, _unit_value_type>;
-using Temperature = /*-- Theta */ DimensionType<Dim<_idx, 0, 0, 0, 1, 0, 0, 0>, _unit_value_type>;
-using Amount = /*----------- N */ DimensionType<Dim<_idx, 0, 0, 0, 0, 1, 0, 0>, _unit_value_type>;
-using Current = /*---------- I */ DimensionType<Dim<_idx, 0, 0, 0, 0, 0, 1, 0>, _unit_value_type>;
-using LuminousIntensity = /* J */ DimensionType<Dim<_idx, 0, 0, 0, 0, 0, 0, 1>, _unit_value_type>;
-using DimensionLessType = /* 1 */ DimensionType<DimensionLess, _unit_value_type>;
+using Length = /*----------- L */ DimensionType<Dim<_idx, 1, 0, 0, 0, 0, 0, 0>>;
+using Mass = /*------------- M */ DimensionType<Dim<_idx, 0, 1, 0, 0, 0, 0, 0>>;
+using Time = /*------------- T */ DimensionType<Dim<_idx, 0, 0, 1, 0, 0, 0, 0>>;
+using Temperature = /*-- Theta */ DimensionType<Dim<_idx, 0, 0, 0, 1, 0, 0, 0>>;
+using Amount = /*----------- N */ DimensionType<Dim<_idx, 0, 0, 0, 0, 1, 0, 0>>;
+using Current = /*---------- I */ DimensionType<Dim<_idx, 0, 0, 0, 0, 0, 1, 0>>;
+using LuminousIntensity = /* J */ DimensionType<Dim<_idx, 0, 0, 0, 0, 0, 0, 1>>;
+using DimensionLessType = /* 1 */ DimensionType<DimensionLess>;
 
 // Derived Unit Types
 using Velocity = decltype(Length{} / Time{});
