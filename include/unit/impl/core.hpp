@@ -32,7 +32,6 @@ public:
     constexpr operator T() const
     {
         static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
-        std::cout << "hoge" << std::endl;
         return static_cast<T>(value);
     }
 
