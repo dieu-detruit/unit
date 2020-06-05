@@ -118,28 +118,21 @@ public:
     constexpr this_type operator-() const { return this_type{-value}; }
 
     // Binary Arithmetic Operators
-#define DECLARE_SCALE_OPERATOR(op)                                                                                               \
-    template <typename T>                                                                                                        \
-    constexpr this_type operator op(T scalar) const                                                                              \
-    {                                                                                                                            \
-        static_assert(std::is_convertible_v<value_type, T>, "You can only multiply value of a type convertible to value_type."); \
-        return this_type{value op scalar};                                                                                       \
-    }                                                                                                                            \
-    template <typename T>                                                                                                        \
-    constexpr this_type operator op(std::complex<T> scalar) const                                                                \
-    {                                                                                                                            \
-        static_assert(std::is_convertible_v<T, value_type>, "You can only multiply value of a type convertible to value_type."); \
-        return this_type{value op scalar};                                                                                       \
-    }                                                                                                                            \
-    template <class dim_>                                                                                                        \
-    constexpr auto operator op(DimensionType<dim_, value_type> right) const                                                      \
-    {                                                                                                                            \
-        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value};                                    \
-    }                                                                                                                            \
-    template <class dim_>                                                                                                        \
-    constexpr auto operator op(DimensionType<dim_, complex_type> right) const                                                    \
-    {                                                                                                                            \
-        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value};                                    \
+#define DECLARE_SCALE_OPERATOR(op)                                                            \
+    template <typename T>                                                                     \
+    constexpr this_type operator op(T scalar) const                                           \
+    {                                                                                         \
+        return this_type{value op scalar};                                                    \
+    }                                                                                         \
+    template <class dim_>                                                                     \
+    constexpr auto operator op(DimensionType<dim_, value_type> right) const                   \
+    {                                                                                         \
+        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value}; \
+    }                                                                                         \
+    template <class dim_>                                                                     \
+    constexpr auto operator op(DimensionType<dim_, complex_type> right) const                 \
+    {                                                                                         \
+        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value}; \
     }
 
     DECLARE_SCALE_OPERATOR(*);
