@@ -11,11 +11,11 @@ namespace Unit
 
 namespace Impl
 {
-constexpr std::size_t abs(std::size_t x)
+constexpr long abs(long x)
 {
     return x > 0 ? x : -x;
 }
-constexpr std::size_t gcd(std::size_t a, std::size_t b)
+constexpr long gcd(long a, long b)
 {
     if (a == 0) {
         return b;
@@ -27,7 +27,7 @@ constexpr std::size_t gcd(std::size_t a, std::size_t b)
     return abs(a) > abs(b) ? gcd(b, a % b) : gcd(a, b % a);
 }
 template <class... Args>
-constexpr std::size_t gcd(std::size_t a, std::size_t b, Args... args)
+constexpr long gcd(long a, long b, Args... args)
 {
     return gcd(gcd(a, b), args...);
 }

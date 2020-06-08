@@ -33,36 +33,36 @@ namespace Unit
  *      - m^(1/2)s^(2/3) = m^(3/6)s^(4/6) = Dim<6, 3, 0, 4, 0, 0, 0, 0>
  * 
  */
-template <std::size_t den, std::size_t... U>
+template <long den, long... U>
 struct Dim {
 private:
-    static constexpr std::size_t g = Impl::gcd(den, U...);
+    static constexpr long g = Impl::gcd(den, U...);
 
 public:
     // irreducible representation
     using irrep_type = Dim<den / g, (U / g)...>;
 
-    template <std::size_t den_, std::size_t... U_>
+    template <long den_, long... U_>
     auto operator*(const Dim<den_, U_...>& rhs) const
         -> typename Dim<den * den_, (den_ * U + den * U_)...>::irrep_type
     {
         return {};
     }
 
-    template <std::size_t den_, std::size_t... U_>
+    template <long den_, long... U_>
     auto operator/(const Dim<den_, U_...>& rhs) const
         -> typename Dim<den * den_, (den_ * U - den * U_)...>::irrep_type
     {
         return {};
     }
 
-    template <std::size_t n>
+    template <long n>
     static auto pow()
         -> typename Dim<den, (U * n)...>::irrep_type
     {
         return {};
     }
-    template <std::size_t d>
+    template <long d>
     static auto root()
         -> typename Dim<den * d, U...>::irrep_type
     {
@@ -78,16 +78,16 @@ template <class T>
 struct get_dimensions {
 };
 
-template <std::size_t den_, std::size_t L_, std::size_t M_, std::size_t T_, std::size_t Theta_, std::size_t N_, std::size_t I_, std::size_t J_>
+template <long den_, long L_, long M_, long T_, long Theta_, long N_, long I_, long J_>
 struct get_dimensions<Dim<den_, L_, M_, T_, Theta_, N_, I_, J_>> {
-    static constexpr std::size_t den = den_;
-    static constexpr std::size_t L = L_;
-    static constexpr std::size_t M = M_;
-    static constexpr std::size_t T = T_;
-    static constexpr std::size_t Theta = Theta_;
-    static constexpr std::size_t N = N_;
-    static constexpr std::size_t I = I_;
-    static constexpr std::size_t J = J_;
+    static constexpr long den = den_;
+    static constexpr long L = L_;
+    static constexpr long M = M_;
+    static constexpr long T = T_;
+    static constexpr long Theta = Theta_;
+    static constexpr long N = N_;
+    static constexpr long I = I_;
+    static constexpr long J = J_;
 };
 
 template <class T>

@@ -23,7 +23,7 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
 
 template <class dim_type>
 struct cancel_denominator {
-    static constexpr std::size_t den = get_dimensions<typename dim_type::dim_t>::den;
+    static constexpr long den = get_dimensions<typename dim_type::dim_t>::den;
     using type = DimensionType<
         decltype(dim_type::dim_t::template pow<den>()),
         typename dim_type::value_t>;
@@ -36,7 +36,7 @@ using cancel_denominator_t = typename cancel_denominator<dim_type>::type;
 template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && has_literal<cancel_denominator_t<dim_type>>::value)>
 std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
-    constexpr std::size_t den = cancel_denominator<dim_type>::den;
+    constexpr long den = cancel_denominator<dim_type>::den;
     return literal_of<cancel_denominator_t<dim_type>>::get() + "^(1/" + std::to_string(den) + ")";
 }
 
@@ -47,7 +47,7 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
         } else if (dim % den == 0) {                                                                     \
             var += std::string(#literal) + "^" + std::to_string(dim / den);                              \
         } else {                                                                                         \
-            constexpr std::size_t g = Impl::gcd(dim, den);                                               \
+            constexpr long g = Impl::gcd(dim, den);                                                      \
             var += std::string(#literal) + "^(" + std::to_string(dim) + "/" + std::to_string(den) + ")"; \
         }                                                                                                \
     }

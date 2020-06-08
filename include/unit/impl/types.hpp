@@ -7,7 +7,7 @@
 namespace Unit
 {
 
-inline constexpr std::size_t _idx = 1;
+inline constexpr long _idx = 1;
 
 // SI Base Unit Types
 using Length = /*----------- L */ DimensionType<Dim<_idx, 1, 0, 0, 0, 0, 0, 0>>;

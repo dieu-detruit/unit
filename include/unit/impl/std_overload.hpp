@@ -23,6 +23,13 @@ namespace std
         return Unit::DimensionType<dim_t>{std::func(x.value, y.value)};        \
     }
 
+#define DECLARE_HOMOGENIUS_TERNARY_CMATH_FUNCTION(func)                                                 \
+    template <class dim_t, ONLY_IF(not Unit::Impl::is_dimensionless_v<dim_t>)>                          \
+    auto func(Unit::DimensionType<dim_t> x, Unit::DimensionType<dim_t> y, Unit::DimensionType<dim_t> z) \
+    {                                                                                                   \
+        return Unit::DimensionType<dim_t>{std::func(x.value, y.value, z.value)};                        \
+    }
+
 
 template <class dim_t, ONLY_IF(not Unit::Impl::is_dimensionless_v<dim_t>)>
 auto atan2(Unit::DimensionType<dim_t> x, Unit::DimensionType<dim_t> y)
@@ -42,6 +49,7 @@ auto cbrt(Unit::DimensionType<dim_t> x)
     return x.cbrt();
 }
 DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(hypot);
+DECLARE_HOMOGENIUS_TERNARY_CMATH_FUNCTION(hypot);
 DECLARE_HOMOGENIUS_UNARY_CMATH_FUNCTION(abs);
 DECLARE_HOMOGENIUS_UNARY_CMATH_FUNCTION(fabs);
 
