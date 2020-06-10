@@ -57,11 +57,17 @@ public:
     explicit constexpr DimensionType(value_type real, value_type imag) : value{complex_type(real, imag)} {}
 
     // Cast Operators
-    template <class T, ONLY_IF(std::is_convertible_v<T, value_type>)>
+    template <class T, class sfinae_dim = dim, ONLY_IF(std::is_floating_point_v<T>and std::is_same_v<T, value_type>and std::is_same_v<sfinae_dim, DimensionLess>)>
     constexpr operator std::complex<T>() const
     {
         static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
-        return value;
+        return static_cast<std::complex<T>>(value);
+    }
+    template <class T, class sfinae_dim = dim, ONLY_IF(!std::is_floating_point_v<T> and std::is_same_v<sfinae_dim, DimensionLess>)>
+    constexpr operator std::complex<T>() const
+    {
+        static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
+        return static_cast<T>(value);
     }
     constexpr operator real_type() { return real_type{value.real()}; }
 
@@ -196,8 +202,8 @@ public:
     static constexpr auto polar(Impl::polar_arg_t<real_type> norm, Phase phase) { return this_type{norm * std::cos(phase.value), norm * std::sin(phase.value)}; }
 
     // Getter (Setter as a lvalue)
-    constexpr auto real() { return real_type{value.real()}; }
-    constexpr auto imag() { return real_type{value.imag()}; }
+    constexpr auto real() const { return real_type{value.real()}; }
+    constexpr auto imag() const { return real_type{value.imag()}; }
 
     // Setter
     void real(real_type real) { value.real(real.value); }
@@ -207,10 +213,10 @@ public:
     void imag(value_type imag) { value.imag(imag); }
 
     // Basic functions for Complex quantity
-    constexpr auto conj() { return this_type{std::conj(value)}; }
-    Phase arg() { return Phase{std::arg(value)}; }
-    auto norm() { return norm_type{std::norm(value)}; }
-    auto abs() { return real_type{std::abs(value)}; }
+    constexpr auto conj() const { return this_type{std::conj(value)}; }
+    Phase arg() const { return Phase{std::arg(value)}; }
+    constexpr auto norm() const { return norm_type{std::norm(value)}; }
+    auto abs() const { return real_type{std::abs(value)}; }
 };
 
 #undef DECLARE_SUBSTITUTION_OPERATOR
