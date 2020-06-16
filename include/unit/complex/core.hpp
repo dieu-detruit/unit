@@ -123,40 +123,6 @@ public:
     constexpr this_type operator+() const { return *this; }
     constexpr this_type operator-() const { return this_type{-value}; }
 
-    // Binary Arithmetic Operators
-#define DECLARE_SCALE_OPERATOR(op)                                                            \
-    template <typename T>                                                                     \
-    constexpr this_type operator op(T scalar) const                                           \
-    {                                                                                         \
-        return this_type{value op scalar};                                                    \
-    }                                                                                         \
-    template <class dim_>                                                                     \
-    constexpr auto operator op(DimensionType<dim_, value_type> right) const                   \
-    {                                                                                         \
-        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value}; \
-    }                                                                                         \
-    template <class dim_>                                                                     \
-    constexpr auto operator op(DimensionType<dim_, complex_type> right) const                 \
-    {                                                                                         \
-        return DimensionType<decltype(dim {} op dim_{}), complex_type>{value op right.value}; \
-    }
-
-    DECLARE_SCALE_OPERATOR(*);
-    DECLARE_SCALE_OPERATOR(/);
-
-#define DECLARE_ADD_OPERATOR(op)                           \
-    constexpr this_type operator op(this_type right) const \
-    {                                                      \
-        return this_type{value op right.value};            \
-    }                                                      \
-    constexpr this_type operator op(real_type right) const \
-    {                                                      \
-        return this_type{value op right.value};            \
-    }
-
-    DECLARE_ADD_OPERATOR(+);
-    DECLARE_ADD_OPERATOR(-);
-
     template <int n>
     auto pow() const
     {
