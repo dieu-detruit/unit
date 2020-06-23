@@ -15,7 +15,7 @@ namespace Impl
 {
 
 // Use unique literal if it exists
-template <class dim_type, ONLY_IF(has_literal<dim_type>::value)>
+template <Fundamental dim_type>
 std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
     return literal_of<dim_type>::get();
@@ -33,8 +33,9 @@ template <class dim_type>
 using cancel_denominator_t = typename cancel_denominator<dim_type>::type;
 
 // Use unique literal if it exists
-template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && has_literal<cancel_denominator_t<dim_type>>::value)>
-std::string dimension_to_str([[maybe_unused]] const dim_type&)
+template <class dim_type>
+requires Combinative<dim_type>&& Fundamental<cancel_denominator_t<dim_type>>
+    std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
     constexpr long den = cancel_denominator<dim_type>::den;
     return literal_of<cancel_denominator_t<dim_type>>::get() + "^(1/" + std::to_string(den) + ")";
@@ -52,8 +53,9 @@ std::string dimension_to_str([[maybe_unused]] const dim_type&)
         }                                                                                                \
     }
 
-template <class dim_type, ONLY_IF(!has_literal<dim_type>::value && !has_literal<cancel_denominator_t<dim_type>>::value)>
-std::string dimension_to_str([[maybe_unused]] const dim_type&)
+template <class dim_type>
+requires Combinative<dim_type>&& Combinative<cancel_denominator_t<dim_type>>
+    std::string dimension_to_str([[maybe_unused]] const dim_type&)
 {
     std::string str;
 

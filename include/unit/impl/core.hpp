@@ -10,6 +10,15 @@
 namespace Unit
 {
 
+template <class T, class U>
+concept RightMultiplicableTo = requires(T& x, U& y)
+{
+    {
+        x* y
+    }
+    ->std::convertible_to<U>;
+};
+
 template <class dim, typename value_type = _unit_value_type>
 struct DimensionType {
 private:
@@ -28,16 +37,10 @@ public:
     constexpr DimensionType(const DimensionType&& rhs) : value(rhs.value) {}
     explicit constexpr DimensionType(value_type value) : value(value) {}
 
-    template <class T, class sfinae_dim = dim, ONLY_IF(std::is_floating_point_v<T>and std::is_same_v<T, value_type>and std::is_same_v<sfinae_dim, DimensionLess>)>
-    constexpr operator T() const
+    // allow only value_type floating-point value to cast implicitly to avoid ambiguous function call of std
+    template <class T>
+    explicit(std::is_floating_point_v<T> and !std::is_same_v<T, value_type>) constexpr operator T() const requires Dimensionless<dim>
     {
-        static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
-        return static_cast<T>(value);
-    }
-    template <class T, class sfinae_dim = dim, ONLY_IF(!std::is_floating_point_v<T> and std::is_same_v<sfinae_dim, DimensionLess>)>
-    constexpr operator T() const
-    {
-        static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
         return static_cast<T>(value);
     }
 
@@ -53,18 +56,18 @@ public:
     DECLARE_SUBSTITUTION_OPERATOR(+=);  // this_type += this_type
     DECLARE_SUBSTITUTION_OPERATOR(-=);  // this_type -= this_type
 
-#define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                              \
-    template <class T>                                                                                       \
-    constexpr this_type& operator op(T scalar)                                                               \
-    {                                                                                                        \
-        static_assert(std::is_convertible_v<T, value_type>, "You can only multiply floating polong value."); \
-        value op scalar;                                                                                     \
-        return *this;                                                                                        \
-    }                                                                                                        \
-    constexpr this_type& operator op(DimensionType<DimensionLess, value_type> scalar)                        \
-    {                                                                                                        \
-        value op scalar.value;                                                                               \
-        return *this;                                                                                        \
+
+#define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                          \
+    template <RightMultiplicableTo<value_type> T>                                        \
+    constexpr this_type& operator op(T scalar)                                           \
+    {                                                                                    \
+        value op scalar;                                                                 \
+        return *this;                                                                    \
+    }                                                                                    \
+    constexpr this_type& operator op(DimensionType<DimensionlessDim, value_type> scalar) \
+    {                                                                                    \
+        value op scalar.value;                                                           \
+        return *this;                                                                    \
     }
 
     DECLARE_SCALE_SUBSTITUTION_OPERATOR(*=);
@@ -114,8 +117,13 @@ public:
     DECLARE_BINARY_BOOL_OPERATOR(>)
     DECLARE_BINARY_BOOL_OPERATOR(>=)
 
-    bool operator==(const complex_dim_type& right) const { return value == right.value.real() and right.value.real() == static_cast<value_type>(0); }
-    bool operator!=(const complex_dim_type& right) const { return value != right.value.real() or right.value.real() != static_cast<value_type>(0); }
+    bool
+    operator==(const complex_dim_type& right) const
+    {
+        return value == right.value.real() and right.value.real() == static_cast<value_type>(0);
+    }
+    bool
+    operator!=(const complex_dim_type& right) const { return value != right.value.real() or right.value.real() != static_cast<value_type>(0); }
 };
 
 namespace Impl

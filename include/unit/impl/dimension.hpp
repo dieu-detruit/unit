@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <type_traits>
 
 #include <unit/impl/utility.hpp>
@@ -33,8 +34,12 @@ namespace Unit
  *      - m^(1/2)s^(2/3) = m^(3/6)s^(4/6) = Dim<6, 3, 0, 4, 0, 0, 0, 0>
  * 
  */
+
+struct DimBase {
+};
+
 template <long den, long... U>
-struct Dim {
+struct Dim : DimBase {
 private:
     static constexpr long g = Impl::gcd(den, U...);
 
@@ -70,7 +75,16 @@ public:
     }
 };
 
-using DimensionLess = Dim<1, 0, 0, 0, 0, 0, 0, 0>;
+using DimensionlessDim = Dim<1, 0, 0, 0, 0, 0, 0, 0>;
+
+template <class T>
+concept Dimensional = std::is_base_of_v<DimBase, T>;
+
+template <class Dim>
+concept Dimensionless = std::is_same_v<Dim, DimensionlessDim>;
+
+template <class Dim>
+concept Dimensionful = Dimensional<Dim> && not Dimensionless<Dim>;
 
 namespace Impl
 {
@@ -89,16 +103,6 @@ struct get_dimensions<Dim<den_, L_, M_, T_, Theta_, N_, I_, J_>> {
     static constexpr long I = I_;
     static constexpr long J = J_;
 };
-
-template <class T>
-struct is_dimensionless : std::false_type {
-};
-template <>
-struct is_dimensionless<DimensionLess> : std::true_type {
-};
-
-template <class T>
-inline constexpr bool is_dimensionless_v = is_dimensionless<T>::value;
 
 }  // namespace Impl
 

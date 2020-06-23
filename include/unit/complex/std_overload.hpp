@@ -42,20 +42,20 @@ inline auto abs(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>
     return x.abs();
 }
 
-inline auto polar(const Unit::DimensionLessType norm, Unit::Phase phase)
+inline auto polar(const Unit::DimensionlessType abs, Unit::Phase phase)
 {
-    return Unit::Complex<Unit::DimensionLessType>{std::polar(norm.value, phase.value)};
+    return Unit::Complex<Unit::DimensionlessType>{std::polar(abs.value, phase.value)};
 }
 
-template <class dim_type, ONLY_IF(not std::is_same_v<dim_type, Unit::Phase>)>
-inline auto polar(dim_type norm, Unit::Phase phase)
+template <Unit::Dimensionful dim_t>
+inline auto polar(Unit::DimensionType<dim_t, Unit::_unit_value_type> abs, Unit::Phase phase)
 {
-    return Unit::Complex<dim_type>{std::polar(norm.value, phase.value)};
+    return Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>{std::polar(abs.value, phase.value)};
 }
 
-inline auto polar(const Unit::_unit_value_type norm, Unit::Phase phase)
+inline auto polar(const Unit::_unit_value_type abs, Unit::Phase phase)
 {
-    return Unit::DimensionType<Unit::DimensionLess, Unit::_complex_unit_value_type>{std::polar(norm, phase.value)};
+    return Unit::DimensionType<Unit::DimensionlessDim, Unit::_complex_unit_value_type>{std::polar(abs, phase.value)};
 }
 
 template <class dim_t>
@@ -71,11 +71,10 @@ inline auto sqrt(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type
         std::sqrt(static_cast<Unit::_complex_unit_value_type>(x))};
 }
 
-#define DECLARE_UNARY_CMATH_REDIRECT_FUNCTION(func)                                                                          \
-    template <class T, ONLY_IF(std::is_same_v<T, Unit::DimensionType<Unit::DimensionLess, Unit::_complex_unit_value_type>>)> \
-    inline auto func(const T& x)                                                                                             \
-    {                                                                                                                        \
-        return std::func(static_cast<Unit::_complex_unit_value_type>(x));                                                    \
+#define DECLARE_UNARY_CMATH_REDIRECT_FUNCTION(func)                       \
+    inline auto func(const Unit::Complex<Unit::DimensionlessType>& x)     \
+    {                                                                     \
+        return std::func(static_cast<Unit::_complex_unit_value_type>(x)); \
     }
 
 DECLARE_UNARY_CMATH_REDIRECT_FUNCTION(acos);

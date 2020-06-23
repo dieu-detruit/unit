@@ -6,9 +6,6 @@
 namespace Unit
 {
 
-#define ONLY_IF_IMPL(cond) std::enable_if_t<cond, std::nullptr_t> = nullptr
-#define ONLY_IF(...) ONLY_IF_IMPL((__VA_ARGS__))
-
 namespace Impl
 {
 constexpr long abs(long x)

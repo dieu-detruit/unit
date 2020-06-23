@@ -24,6 +24,11 @@ struct literal_of {
 
 }  // namespace Impl
 
+template <class dim_type>
+concept Fundamental = Impl::has_literal<dim_type>::value;
+
+template <class dim_type>
+concept Combinative = not Impl::has_literal<dim_type>::value;
 
 #define DECLARE_LITERAL_IMPL_LI(unit_type, constant, literal)          \
     inline constexpr unit_type operator""_##literal(long double value) \

@@ -21,8 +21,8 @@ struct polar_arg {
     using type = dim_type;
 };
 template <>
-struct polar_arg<DimensionLessType> {
-    using type = DimensionLessType::value_t;
+struct polar_arg<DimensionlessType> {
+    using type = DimensionlessType::value_t;
 };
 template <class dim_type>
 using polar_arg_t = typename polar_arg<dim_type>::type;
@@ -57,18 +57,12 @@ public:
     explicit constexpr DimensionType(value_type real, value_type imag) : value{complex_type(real, imag)} {}
 
     // Cast Operators
-    template <class T, class sfinae_dim = dim, ONLY_IF(std::is_floating_point_v<T>and std::is_same_v<T, value_type>and std::is_same_v<sfinae_dim, DimensionLess>)>
-    constexpr operator std::complex<T>() const
+    template <class T>
+    explicit(std::is_floating_point_v<T> and !std::is_same_v<T, value_type>) constexpr operator std::complex<T>() const
     {
-        static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
         return static_cast<std::complex<T>>(value);
     }
-    template <class T, class sfinae_dim = dim, ONLY_IF(!std::is_floating_point_v<T> and std::is_same_v<sfinae_dim, DimensionLess>)>
-    constexpr operator std::complex<T>() const
-    {
-        static_assert(std::is_same_v<dim, DimensionLess>, "Only dimension-less type can be casted to value type.");
-        return static_cast<T>(value);
-    }
+
     constexpr operator real_type() { return real_type{value.real()}; }
 
     this_type& operator()() = delete;
@@ -91,33 +85,32 @@ public:
     DECLARE_SUBSTITUTION_OPERATOR(-=);  // this_type -= this_type, this_type -= real_type
 
 #define DECLARE_SCALE_SUBSTITUTION_OPERATOR(op)                                                             \
-    template <class T, ONLY_IF(std::is_arithmetic_v<T>)>                                                    \
+    template <RightMultiplicableTo<value_type> T>                                                           \
     constexpr this_type& operator op(T scalar)                                                              \
     {                                                                                                       \
-        static_assert(std::is_convertible_v<value_type, T>, "You can only multiply floating point value."); \
         value op scalar;                                                                                    \
         return *this;                                                                                       \
     }                                                                                                       \
-    template <class T, ONLY_IF(std::is_arithmetic_v<T>)>                                                    \
+    template <RightMultiplicableTo<value_type> T>                                                           \
     constexpr this_type& operator op(std::complex<T> scalar)                                                \
     {                                                                                                       \
         static_assert(std::is_convertible_v<value_type, T>, "You can only multiply floating point value."); \
         value op scalar;                                                                                    \
         return *this;                                                                                       \
     }                                                                                                       \
-    constexpr this_type& operator op(DimensionType<DimensionLess, value_type> scalar)                       \
+    constexpr this_type& operator op(DimensionType<DimensionlessDim, value_type> scalar)                    \
     {                                                                                                       \
         value op scalar.value;                                                                              \
         return *this;                                                                                       \
     }                                                                                                       \
-    constexpr this_type& operator op(DimensionType<DimensionLess, complex_type> scalar)                     \
+    constexpr this_type& operator op(DimensionType<DimensionlessDim, complex_type> scalar)                  \
     {                                                                                                       \
         value op scalar.value;                                                                              \
         return *this;                                                                                       \
     }
 
-    DECLARE_SCALE_SUBSTITUTION_OPERATOR(*=);  // this_type *= floating_point, this_type *= complex<floating>, this_type *= DimensionLessType
-    DECLARE_SCALE_SUBSTITUTION_OPERATOR(/=);  // this_type /= floating_point, this_type /= real_type, this_type /= DimensionLessType
+    DECLARE_SCALE_SUBSTITUTION_OPERATOR(*=);  // this_type *= floating_point, this_type *= complex<floating>, this_type *= DimensionlessType
+    DECLARE_SCALE_SUBSTITUTION_OPERATOR(/=);  // this_type /= floating_point, this_type /= real_type, this_type /= DimensionlessType
 
     // Unary Arithmetic Operators
     constexpr this_type operator+() const { return *this; }
