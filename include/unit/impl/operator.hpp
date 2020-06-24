@@ -18,15 +18,15 @@ DECLARE_HOMOGENIUS_ADD_OPERATOR(+);
 DECLARE_HOMOGENIUS_ADD_OPERATOR(-);
 
 #define DECLARE_DIMENSIONLESS_ADD_OPERATOR(op)                                                       \
-    template <Dimensional value_type, typename T>                                                    \
+    template <typename value_type, typename T>                                                       \
     constexpr auto operator op(T left, DimensionType<DimensionlessDim, value_type> right)            \
     {                                                                                                \
         return DimensionType<DimensionlessDim, decltype(T {} op value_type{})>{left op right.value}; \
     }                                                                                                \
-    template <Dimensional T, typename value_type>                                                    \
+    template <typename T, typename value_type>                                                       \
     constexpr auto operator op(DimensionType<DimensionlessDim, value_type> left, T right)            \
     {                                                                                                \
-        return DimensionType<DimensionlessDim, decltype(value_type {} op T{})>{left op right.value}; \
+        return DimensionType<DimensionlessDim, decltype(value_type {} op T{})>{left.value op right}; \
     }
 
 DECLARE_DIMENSIONLESS_ADD_OPERATOR(+);
