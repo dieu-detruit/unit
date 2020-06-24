@@ -8,7 +8,7 @@ namespace Unit
 {
 
 #define DECLARE_HOMOGENIUS_ADD_OPERATOR(op)                                                                          \
-    template <class dim, class left_value_type, class right_value_type>                                              \
+    template <Dimensional dim, class left_value_type, class right_value_type>                                        \
     constexpr auto operator op(DimensionType<dim, left_value_type> left, DimensionType<dim, right_value_type> right) \
     {                                                                                                                \
         return DimensionType<dim, decltype(left_value_type {} op right_value_type{})>{left.value op right.value};    \

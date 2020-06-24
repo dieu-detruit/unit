@@ -11,32 +11,32 @@
 namespace std
 {
 
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto real(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return x.real();
 }
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto imag(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return x.imag();
 }
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto conj(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return x.conj();
 }
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto arg(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return x.arg();
 }
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto norm(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return x.norm();
 }
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto abs(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return x.abs();
@@ -58,7 +58,7 @@ inline auto polar(const Unit::_unit_value_type abs, Unit::Phase phase)
     return Unit::DimensionType<Unit::DimensionlessDim, Unit::_complex_unit_value_type>{std::polar(abs, phase.value)};
 }
 
-template <class dim_t>
+template <Unit::Dimensional dim_t>
 inline auto proj(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type>& x)
 {
     return std::proj(static_cast<Unit::_complex_unit_value_type>(x));
@@ -72,7 +72,9 @@ inline auto sqrt(const Unit::DimensionType<dim_t, Unit::_complex_unit_value_type
 }
 
 #define DECLARE_UNARY_CMATH_REDIRECT_FUNCTION(func)                       \
-    inline auto func(const Unit::Complex<Unit::DimensionlessType>& x)     \
+    template <std::same_as<Unit::Complex<Unit::DimensionlessType>> T>     \
+    inline auto func(const T& x)                                          \
+        ->Unit::_complex_unit_value_type                                  \
     {                                                                     \
         return std::func(static_cast<Unit::_complex_unit_value_type>(x)); \
     }

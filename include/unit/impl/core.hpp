@@ -19,7 +19,22 @@ concept RightMultiplicableTo = requires(T& x, U& y)
     ->std::convertible_to<U>;
 };
 
-template <class dim, typename value_type = _unit_value_type>
+template <class T>
+concept non_referential = not std::is_reference_v<T>;
+
+template <class T>
+concept referential = std::is_reference_v<T>;
+
+template <class T>
+concept arithmetic = std::integral<T> or std::floating_point<T>;
+
+template <class T, class U>
+concept other_floating_point = std::same_as<T, U>and std::floating_point<T>;
+
+template <class T>
+concept non_floating_point = not std::floating_point<T>;
+
+template <Dimensional dim, non_referential value_type = _unit_value_type>
 struct DimensionType {
 private:
     using this_type = DimensionType<dim, value_type>;
@@ -38,10 +53,27 @@ public:
     explicit constexpr DimensionType(value_type value) : value(value) {}
 
     // allow only value_type floating-point value to cast implicitly to avoid ambiguous function call of std
-    template <class T>
-    explicit(std::is_floating_point_v<T> and !std::is_same_v<T, value_type>) constexpr operator T() const requires Dimensionless<dim>
+    //template <typename T>
+    //explicit(not std::is_same_v<T, value_type>) constexpr operator T() const requires Dimensionless<dim>
+    //{
+    //return static_cast<T>(value);
+    //}
+
+    template <non_floating_point T>
+    explicit constexpr operator T()
     {
         return static_cast<T>(value);
+    }
+    template <other_floating_point<value_type> T>
+    operator T() = delete;
+
+    constexpr operator value_type&()
+    {
+        return value;
+    }
+    constexpr operator const value_type&() const
+    {
+        return value;
     }
 
 // Substitution Operators
