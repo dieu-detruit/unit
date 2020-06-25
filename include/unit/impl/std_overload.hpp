@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cmath>
 
 #include <type_traits>
@@ -8,26 +10,26 @@
 namespace std
 {
 
-#define DECLARE_HOMOGENIUS_UNARY_CMATH_FUNCTION(func)          \
-    template <Unit::Dimensionless dim_t>                       \
-    auto func(Unit::DimensionType<dim_t> x)                    \
-    {                                                          \
-        return Unit::DimensionType<dim_t>{std::func(x.value)}; \
+#define DECLARE_HOMOGENIUS_UNARY_CMATH_FUNCTION(func)             \
+    template <Unit::Dimensionful dim_t>                           \
+    Unit::DimensionType<dim_t> func(Unit::DimensionType<dim_t> x) \
+    {                                                             \
+        return Unit::DimensionType<dim_t>{std::func(x.value)};    \
     }
 
 
-#define DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(func)                    \
-    template <Unit::Dimensionful dim_t>                                   \
-    auto func(Unit::DimensionType<dim_t> x, Unit::DimensionType<dim_t> y) \
-    {                                                                     \
-        return Unit::DimensionType<dim_t>{std::func(x.value, y.value)};   \
+#define DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(func)                                          \
+    template <Unit::Dimensionful dim_t>                                                         \
+    Unit::DimensionType<dim_t> func(Unit::DimensionType<dim_t> x, Unit::DimensionType<dim_t> y) \
+    {                                                                                           \
+        return Unit::DimensionType<dim_t>{std::func(x.value, y.value)};                         \
     }
 
-#define DECLARE_HOMOGENIUS_TERNARY_CMATH_FUNCTION(func)                                                 \
-    template <Unit::Dimensionful dim_t>                                                                 \
-    auto func(Unit::DimensionType<dim_t> x, Unit::DimensionType<dim_t> y, Unit::DimensionType<dim_t> z) \
-    {                                                                                                   \
-        return Unit::DimensionType<dim_t>{std::func(x.value, y.value, z.value)};                        \
+#define DECLARE_HOMOGENIUS_TERNARY_CMATH_FUNCTION(func)                                                                       \
+    template <Unit::Dimensionful dim_t>                                                                                       \
+    Unit::DimensionType<dim_t> func(Unit::DimensionType<dim_t> x, Unit::DimensionType<dim_t> y, Unit::DimensionType<dim_t> z) \
+    {                                                                                                                         \
+        return Unit::DimensionType<dim_t>{std::func(x.value, y.value, z.value)};                                              \
     }
 
 
@@ -71,6 +73,18 @@ DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(nextafter);
 DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(fmax);
 DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(fmin);
 DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION(fdim);
+
+// sign
+template <Unit::Dimensionful dim_t>
+bool signbit(Unit::DimensionType<dim_t> x)
+{
+    return std::signbit(x.value);
+}
+template <Unit::Dimensionful x_dim_t, Unit::Dimensionful y_dim_t>
+bool signbit(Unit::DimensionType<x_dim_t> x, Unit::DimensionType<y_dim_t> y)
+{
+    return Unit::DimensionType<x_dim_t>{std::copysign(x.value, y.value)};
+}
 
 #undef DECLARE_HOMOGENIUS_UNARY_CMATH_FUNCTION
 #undef DECLARE_HOMOGENIUS_BINARY_CMATH_FUNCTION

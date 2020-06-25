@@ -60,18 +60,18 @@ public:
     //}
 
     template <non_floating_point T>
-    explicit constexpr operator T()
+    explicit constexpr operator T() requires Dimensionless<dim>
     {
         return static_cast<T>(value);
     }
     template <other_floating_point<value_type> T>
     operator T() = delete;
 
-    constexpr operator value_type&()
+    constexpr operator value_type&() requires Dimensionless<dim>
     {
         return value;
     }
-    constexpr operator const value_type&() const
+    constexpr operator const value_type&() const requires Dimensionless<dim>
     {
         return value;
     }
